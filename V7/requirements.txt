@@ -1,0 +1,12 @@
+# Prompt Like A PRO has no external dependencies.
+#
+# app.py uses only the Python 3 standard library (argparse, csv, datetime,
+# json, mimetypes, os, re, sqlite3, threading, urllib.parse, urllib.request, urllib.error, webbrowser,
+# http.server, pathlib, typing). index.html and leaderboard.html are
+# self-contained static files with inline CSS and vanilla JavaScript.
+# No build step, no npm, no pip install required.
+#
+# This file is intentionally left without packages. It exists so tooling
+# that expects a requirements.txt (CI, IDEs, deployment scripts) finds one.
+#
+# Requires: Python >= 3.9

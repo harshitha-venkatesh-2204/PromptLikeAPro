@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Leaderboard | Prompt Like A PRO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* Brand/theme color — now violet (variable names kept for compatibility) */
+  --green:#7C3AED; --green-dk:#6D28D9; --green-lt:#EDE4FF;
+  --blue:#1CB0F6; --blue-dk:#1899D6; --blue-lt:#DDF4FF;
+  --orange:#FF9600; --orange-dk:#E08600; --orange-lt:#FFF0DB;
+  --red:#FF4B4B; --red-dk:#E04343; --red-lt:#FFE3E3;
+  --purple:#CE82FF; --purple-dk:#A568CC; --purple-lt:#F4E5FF;
+  --gold:#FFC800; --gold-dk:#E0B000; --gold-lt:#FFF5D3;
+  --ink:#3C3C3C; --ink2:#777; --line:#E5E5E5; --bg:#FFFFFF; --bg2:#F7F7F7;
+  --r:16px;
+  --font:'Nunito','Segoe UI Rounded','Arial Rounded MT Bold',system-ui,-apple-system,sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);font-weight:800;color:var(--ink);min-height:100vh;overflow-x:hidden;
+  background:
+    radial-gradient(circle at 12% 18%, var(--green-lt) 0, transparent 26%),
+    radial-gradient(circle at 88% 14%, var(--blue-lt) 0, transparent 26%),
+    radial-gradient(circle at 82% 86%, var(--purple-lt) 0, transparent 24%),
+    radial-gradient(circle at 14% 84%, var(--gold-lt) 0, transparent 24%),
+    var(--bg);
+}
+@keyframes popIn{0%{opacity:0;transform:scale(.7)}70%{transform:scale(1.05)}100%{opacity:1;transform:scale(1)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes wiggle{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}
+@keyframes pulseDot{0%,100%{opacity:1}50%{opacity:.3}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes confettiFall{0%{transform:translateY(-10vh) rotate(0)}100%{transform:translateY(110vh) rotate(720deg)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+.wrap{max-width:1100px;margin:0 auto;padding:24px 20px 56px}
+
+/* header */
+.head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand .logo{width:42px;height:42px;border-radius:14px;background:var(--green);border-bottom:3px solid var(--green-dk);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:15px;animation:wiggle 5s ease-in-out infinite}
+.brand h1{font-size:26px;font-weight:900;letter-spacing:-.3px}
+.brand p{color:var(--ink2);font-size:13px;font-weight:800;margin-top:1px}
+.head-right{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.live-chip{display:inline-flex;align-items:center;gap:9px;background:var(--bg2);border:2px solid var(--line);border-radius:12px;padding:9px 14px;font-size:14px;font-weight:900;letter-spacing:.8px;text-transform:uppercase;color:var(--ink2)}
+.live-chip i{width:11px;height:11px;border-radius:50%;background:var(--red);animation:pulseDot 1.4s ease-in-out infinite}
+.csv-btn,.game-link{display:inline-flex;align-items:center;justify-content:center;gap:8px;font-weight:900;font-size:14px;letter-spacing:.8px;text-transform:uppercase;padding:12px 20px;border-radius:var(--r);text-decoration:none;transition:filter .15s,transform .1s,border-bottom-width .1s}
+.csv-btn{background:var(--gold);border-bottom:4px solid var(--gold-dk);color:#5b4300}
+.game-link{background:#fff;border:2px solid var(--line);border-bottom:4px solid var(--line);color:var(--blue)}
+.csv-btn:hover{filter:brightness(1.06)}
+.game-link:hover{background:var(--blue-lt)}
+.csv-btn:active,.game-link:active{transform:translateY(3px);border-bottom-width:1px}
+
+/* stats strip */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
+.stat{background:#fff;border:2px solid var(--line);border-bottom-width:4px;border-radius:18px;padding:16px 20px;text-align:center;animation:slideUp .5s ease both}
+.stat b{display:block;font-size:34px;font-weight:900}
+.stat:nth-child(1) b{color:var(--green-dk)}
+.stat:nth-child(2) b{color:var(--blue-dk)}
+.stat:nth-child(3) b{color:var(--gold-dk)}
+.stat span{font-size:13px;font-weight:900;letter-spacing:1.1px;text-transform:uppercase;color:var(--ink2)}
+
+/* ranking rows */
+.board{animation:slideUp .55s ease both}
+.board-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.board-head h2{font-size:20px;font-weight:900;letter-spacing:.5px;text-transform:uppercase;color:var(--ink2)}
+.rows{display:flex;flex-direction:column;gap:10px}
+.row{display:grid;grid-template-columns:70px 62px 1fr auto auto;align-items:center;gap:18px;background:#fff;border:2px solid var(--line);border-bottom-width:4px;border-radius:18px;padding:13px 20px;animation:slideUp .4s ease both;transition:transform .18s,box-shadow .18s}
+.row:hover{transform:translateY(-3px);box-shadow:0 12px 24px rgba(60,60,60,.1)}
+.row.rank-1{border-color:#ffe285;background:linear-gradient(90deg,var(--gold-lt),#fff 46%);position:relative;overflow:hidden}
+.row.rank-1::after{content:'';position:absolute;inset:0;background:linear-gradient(105deg,transparent 42%,rgba(255,214,64,.22) 50%,transparent 58%);background-size:230% 100%;animation:goldSweep 3.4s linear infinite;pointer-events:none}
+@keyframes goldSweep{0%{background-position:190% 0}100%{background-position:-90% 0}}
+@keyframes statPop{0%{transform:scale(1)}45%{transform:scale(1.22)}100%{transform:scale(1)}}
+.stat b.bump{animation:statPop .5s cubic-bezier(.34,1.56,.64,1)}
+.row.rank-1 .ravatar{animation:champGlow 2.4s ease-in-out infinite}
+@keyframes champGlow{0%,100%{box-shadow:0 0 0 2px var(--line)}50%{box-shadow:0 0 0 4px var(--gold),0 0 18px rgba(255,200,0,.45)}}
+.row.rank-2{border-color:#a8e3ff;background:linear-gradient(90deg,var(--blue-lt),#fff 46%)}
+.row.rank-3{border-color:#ffc892;background:linear-gradient(90deg,var(--orange-lt),#fff 46%)}
+.row .rk{font-size:24px;font-weight:900;color:var(--ink2)}
+.row.rank-1 .rk,.row.rank-1 .rscore{color:var(--gold-dk)}
+.row.rank-2 .rk{color:var(--blue-dk)}
+.row.rank-3 .rk{color:var(--orange-dk)}
+.ravatar{width:52px;height:52px;border-radius:50%;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;overflow:hidden;border:2px solid #fff;box-shadow:0 0 0 2px var(--line)}
+.ravatar img{width:100%;height:100%;object-fit:cover}
+.rname{font-size:21px;font-weight:900}
+.rname span{display:block;font-size:13px;color:var(--ink2);font-weight:800}
+.rbar{width:220px;height:14px;border-radius:999px;background:var(--bg2);overflow:hidden;justify-self:end}
+.rbar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--green),#A78BFA);background-size:200% 100%;animation:shimmer 2.6s linear infinite;transition:width .8s ease}
+.rscore{font-size:28px;font-weight:900;color:var(--green);min-width:86px;text-align:right}
+.empty{text-align:center;background:#fff;border:2px solid var(--line);border-bottom-width:4px;border-radius:22px;padding:70px 20px;color:var(--ink2)}
+.empty b{display:block;font-size:30px;color:var(--ink);font-weight:900;margin-bottom:8px}
+.empty p{font-size:17px;font-weight:800}
+/* reset icon button */
+.icon-btn{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:14px;background:#fff;border:2px solid var(--line);border-bottom:4px solid var(--line);color:var(--ink2);cursor:pointer;transition:filter .15s,transform .1s,border-bottom-width .1s,color .15s,border-color .15s}
+.icon-btn:hover{color:var(--red);border-color:#ffc9c9;background:var(--red-lt)}
+.icon-btn:active{transform:translateY(3px);border-bottom-width:1px}
+/* chocolate prize chip */
+.prize-chip{display:inline-flex;align-items:center;gap:8px;background:var(--gold-lt);border:2px solid #ffe285;border-radius:999px;padding:8px 16px;font-size:14px;font-weight:900;color:#7a5c00;animation:bob 3s ease-in-out infinite}
+.prize-chip svg{flex:none}
+/* winner celebration overlay */
+.champ-overlay{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;background:rgba(40,20,80,.45);backdrop-filter:blur(3px);animation:popIn .01s both;cursor:pointer}
+.champ-card{background:#fff;border-radius:28px;border:3px solid var(--gold);box-shadow:0 30px 80px rgba(0,0,0,.35);padding:44px 52px;text-align:center;max-width:520px;width:calc(100% - 40px);animation:popIn .45s cubic-bezier(.34,1.56,.64,1) both;cursor:default}
+.champ-card .cavatar{width:96px;height:96px;border-radius:50%;background:var(--purple);color:#fff;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:900;overflow:hidden;margin:0 auto 14px;border:4px solid var(--gold);box-shadow:0 0 0 6px var(--gold-lt),0 0 30px rgba(255,200,0,.5);animation:champGlow 2.4s ease-in-out infinite}
+.champ-card .cavatar img{width:100%;height:100%;object-fit:cover}
+.champ-card h2{font-size:32px;font-weight:900;color:var(--gold-dk);letter-spacing:-.4px;margin-bottom:4px}
+.champ-card .cname{font-size:24px;font-weight:900;margin-bottom:6px}
+.champ-card .cscore{font-size:16px;font-weight:900;color:var(--ink2);margin-bottom:16px}
+.champ-card .choco{font-size:17px;font-weight:900;background:var(--gold-lt);border:2px solid #ffe285;border-radius:16px;padding:12px 16px;color:#7a5c00}
+.champ-card .hint{margin-top:14px;font-size:12px;font-weight:800;color:var(--ink2)}
+.row.rank-1{cursor:pointer}
+.confetti-piece{position:fixed;top:-4vh;width:12px;height:18px;border-radius:3px;z-index:9;animation:confettiFall linear forwards;pointer-events:none}
+
+@media(max-width:900px){
+  .stats{grid-template-columns:1fr}
+  .rbar{display:none}
+  .brand h1{font-size:24px}
+  .row{grid-template-columns:44px 46px 1fr auto;gap:10px;padding:11px 14px}
+  .row .rk{font-size:18px}.rname{font-size:16px}.rscore{font-size:20px;min-width:60px}
+  .wrap{padding:18px 16px 30px}
+}
+
+/* LIVE dot heartbeat - scale + fade pulse (overrides pulseDot by cascade) */
+@keyframes proLiveBeat{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.45);opacity:.45}}
+.live-chip i{animation:proLiveBeat 1.6s ease-in-out infinite}
+
+/* Reduced motion: also zero DELAYS (staggered rows use fill both, so an
+   un-zeroed delay would leave them invisible while they wait) */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;transition-delay:0ms!important;scroll-behavior:auto!important}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <div class="brand">
+      <div class="logo">PRO</div>
+      <div><h1>Prompt Like A PRO</h1><p>AI Day live leaderboard &middot; ties broken by fastest total time</p></div>
+    </div>
+    <div class="head-right">
+      <span class="live-chip"><i></i> Live <span id="lastUpdate" style="text-transform:none;letter-spacing:0"></span></span>
+      <a class="game-link" href="/">Game App</a>
+      <a class="csv-btn" href="/api/export/leaderboard.csv">Export CSV</a>
+      <button id="resetBtn" class="icon-btn" type="button" title="Clear the board and start fresh" aria-label="Clear the board and start fresh"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg></button>
+    </div>
+  </header>
+
+  <div class="stats">
+    <div class="stat"><b id="statPlayers">0</b><span>Players on the board</span></div>
+    <div class="stat"><b id="statGames">0</b><span>Games completed</span></div>
+    <div class="stat"><b id="statTop">0</b><span>Top score</span></div>
+  </div>
+
+  <div class="board">
+    <div class="board-head"><h2>Rankings</h2><span class="prize-chip"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#7a5c00" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 9h16M4 15h16M12 3v18"/></svg> #1 on the board wins the chocolate!</span><h2 id="rowCount"></h2></div>
+    <div id="rows" class="rows"></div>
+  </div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+let lastLeaderName=null;
+function esc(s){return String(s??'').replace(/[&<>'"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[m]))}
+function initials(n){const p=String(n||'').trim().split(/\s+/).filter(Boolean);return ((p[0]?.[0]||'P')+(p[1]?.[0]||p[0]?.[1]||'L')).toUpperCase()}
+function avatar(row,cls){const img=row.photo_data||'';return `<div class="${cls}">${img?`<img src="${img}" alt="${esc(row.name)}">`:esc(initials(row.name))}</div>`}
+function rowClass(r){return r.rank<=3?`row rank-${r.rank}`:'row'}
+function fmtTime(sec){sec=Math.max(0,Math.round(sec||0));return Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0')}
+function rankingRow(r,top,i){return `<div class="${rowClass(r)}" style="animation-delay:${Math.min(i*60,900)}ms"><div class="rk">#${r.rank}</div>${avatar(r,'ravatar')}<div class="rname">${esc(r.name)}<span>${r.games_completed} game${r.games_completed===1?'':'s'} played | best ${r.best_score} | &#9201; ${fmtTime(r.total_time)}</span></div><div class="rbar"><i style="width:${Math.round(r.total_score/Math.max(1,top)*100)}%"></i></div><div class="rscore">${r.total_score}</div></div>`}
+
+function setStat(id,val){const el=$(id);const s=String(val);if(el.textContent!==s){el.textContent=s;el.classList.remove('bump');void el.offsetWidth;el.classList.add('bump')}}
+
+let lastBoardKey='';
+function render(board){boardCache=board;
+const key=JSON.stringify(board.map(r=>[r.rank,r.name,r.total_score,r.total_time,r.games_completed,r.best_score,(r.photo_data||'').length]));
+const changed=key!==lastBoardKey;
+const players=board.length;
+const totalGames=board.reduce((s,r)=>s+(r.games_completed||0),0);
+const top=board.length?board[0].total_score:0;
+setStat('statPlayers',players);
+setStat('statGames',totalGames);
+setStat('statTop',top);
+if(!board.length){if(changed){$('rows').innerHTML='<div class="empty"><b>Waiting for the first score...</b><p>Play a game at the booth to claim the crown!</p></div>';$('rowCount').textContent='';lastBoardKey=key}return}
+if(changed){
+const shown=board.slice(0,15);
+$('rowCount').textContent=`Showing ${shown.length} of ${players}`;
+$('rows').innerHTML=shown.map((r,i)=>rankingRow(r,top,i)).join('');
+lastBoardKey=key}
+if(board[0]&&board[0].name!==lastLeaderName){if(lastLeaderName!==null)confetti();lastLeaderName=board[0].name}}
+
+/* Web Audio sound effects (offline, no files). Created on first user tap. */
+function sfxCtx(){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return null;const c=window.__lbCtx||(window.__lbCtx=new AC());if(c.state==='suspended')c.resume();return c}
+function tone(f,{at=0,dur=.18,type='triangle',vol=.22,to=null}={}){try{const c=sfxCtx();if(!c)return;const t=c.currentTime+at;const o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.setValueAtTime(f,t);if(to)o.frequency.exponentialRampToValueAtTime(to,t+dur);g.gain.setValueAtTime(0.0001,t);g.gain.exponentialRampToValueAtTime(vol,t+0.015);g.gain.exponentialRampToValueAtTime(0.0001,t+dur);o.connect(g).connect(c.destination);o.start(t);o.stop(t+dur+0.05)}catch(e){}}
+function fanfare(){[523.25,659.25,783.99,1046.5].forEach((f,i)=>tone(f,{at:i*.13,dur:i===3?.6:.2,vol:.26}));[2093,2637,3136].forEach((f,i)=>tone(f,{at:.55+i*.1,dur:.16,type:'sine',vol:.1}));[261.63,329.63,392].forEach(f=>tone(f,{at:.55,dur:.9,vol:.12}))}
+function sadClick(){tone(500,{dur:.08,vol:.12})}
+document.addEventListener('pointerdown',()=>{try{sfxCtx()}catch(e){}});
+
+/* winner celebration: tap the #1 row */
+let boardCache=[];
+function showChampion(){const r=boardCache[0];if(!r)return;
+const old=document.querySelector('.champ-overlay');if(old)old.remove();
+const o=document.createElement('div');o.className='champ-overlay';
+o.innerHTML=`<div class="champ-card">${avatar(r,'cavatar')}
+<h2>Congratulations!</h2>
+<div class="cname">${esc(r.name)}</div>
+<div class="cscore">#1 &middot; ${r.total_score} XP &middot; ${r.games_completed} game${r.games_completed===1?'':'s'} &middot; &#9201; ${fmtTime(r.total_time)}</div>
+<div class="choco"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#7a5c00" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-3px"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 9h16M4 15h16M12 3v18"/></svg> Top of the board — the chocolate is yours!</div>
+<div class="hint">Tap anywhere to close</div></div>`;
+o.addEventListener('click',()=>o.remove());
+document.body.appendChild(o);
+fanfare();confetti();setTimeout(confetti,900)}
+document.addEventListener('click',e=>{if(e.target.closest('.row.rank-1'))showChampion()});
+
+/* reset: trash icon clears every player and score (double confirmation) */
+document.getElementById('resetBtn').addEventListener('click',async()=>{
+sadClick();
+if(!confirm('Clear the ENTIRE leaderboard?\nThis deletes every player and every score.'))return;
+if(!confirm('Are you sure? This cannot be undone.'))return;
+try{const res=await fetch('/api/reset',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});const data=await res.json();
+if(data.ok){lastBoardKey='';lastLeaderName=null;render([]);tone(392,{dur:.25,vol:.18});tone(523.25,{at:.2,dur:.35,vol:.18})}else{alert(data.message||'Reset failed.')}}
+catch(e){alert('Could not reach the game server.')}});
+
+function confetti(){const colors=['#7C3AED','#1CB0F6','#FF9600','#CE82FF','#FFC800','#FF4B4B'];const n=window.matchMedia('(prefers-reduced-motion: reduce)').matches?0:80;
+for(let i=0;i<n;i++){const p=document.createElement('div');p.className='confetti-piece';p.style.left=Math.random()*100+'vw';p.style.background=colors[i%colors.length];p.style.animationDuration=(2.2+Math.random()*1.8)+'s';p.style.animationDelay=(Math.random()*.6)+'s';document.body.appendChild(p);setTimeout(()=>p.remove(),5200)}}
+
+async function refresh(){
+try{
+const res=await fetch('/api/leaderboard');
+const data=await res.json();
+if(data.ok){render(data.leaderboard||[]);$('lastUpdate').textContent=' | '+new Date().toLocaleTimeString()}
+}catch(e){$('lastUpdate').textContent=' | reconnecting...'}}
+refresh();
+setInterval(refresh,5000);
+</script>
+</body>
+</html>
