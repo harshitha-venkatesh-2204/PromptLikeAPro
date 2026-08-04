@@ -1,0 +1,22 @@
+# Secrets — never commit
+.env
+gateway/.env
+*.env
+!*.env.example
+!gateway/.env.example
+
+# Virtualenvs
+.venv-gateway/
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Local data (SQLite is created at runtime)
+data/*.sqlite3
+
+# Claude Code local settings
+.claude/settings.local.json

@@ -1,0 +1,20 @@
+# LLM gateway service dependencies (separate from the booth app, which is
+# stdlib-only). Install into a dedicated virtualenv:
+#
+#   python -m venv .venv-gateway
+#   . .venv-gateway/bin/activate
+#   pip install -r gateway/requirements.txt
+#
+# Requires Python >= 3.9.
+
+fastapi>=0.110
+# Plain uvicorn on purpose (NOT uvicorn[standard]): the [standard] extras pull
+# in watchfiles/uvloop/httptools, which need a Rust/C compiler when no prebuilt
+# wheel exists for the local Python. The gateway does not use auto-reload, so
+# the pure-Python server is all it needs and installs everywhere.
+uvicorn>=0.29
+httpx>=0.27
+
+# --- test-only (safe to install everywhere; not needed at runtime) ---
+pytest>=8
+pytest-asyncio>=0.23
