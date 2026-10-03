@@ -20,6 +20,7 @@ from __future__ import annotations
 import argparse
 import csv
 import datetime as dt
+import hmac
 import json
 import mimetypes
 import os
@@ -601,6 +602,12 @@ class AppHandler(BaseHTTPRequestHandler):
                 self.send_json({"ok": True, "output": output})
                 return
             if path == "/api/reset":
+                # When ADMIN_TOKEN is set (e.g. on a public deploy), wiping the
+                # leaderboard requires it as an "X-Admin-Token" header.
+                admin_token = os.environ.get("ADMIN_TOKEN", "")
+                if admin_token and not hmac.compare_digest(self.headers.get("X-Admin-Token", ""), admin_token):
+                    self.send_json({"ok": False, "error": "Admin token required."}, 403)
+                    return
                 with DB_LOCK:
                     with get_db() as conn:
                         conn.execute("DELETE FROM scores")

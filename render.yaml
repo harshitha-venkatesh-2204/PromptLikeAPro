@@ -25,6 +25,9 @@ services:
         generateValue: true
       - key: GATEWAY_HASH_SALT
         generateValue: true
+      # Required as an "X-Admin-Token" header to POST /api/reset.
+      - key: ADMIN_TOKEN
+        generateValue: true
     # The free plan's filesystem is wiped on every restart/redeploy, so the
     # SQLite leaderboard resets. To keep it, switch to a paid plan and
     # uncomment the disk below.
