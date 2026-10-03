@@ -35,7 +35,9 @@ from pathlib import Path
 from typing import Any
 
 APP_DIR = Path(__file__).resolve().parent
-DATA_DIR = APP_DIR / "data"
+# PLAP_DATA_DIR lets a host (e.g. a Render persistent disk) keep the database
+# outside the app directory.
+DATA_DIR = Path(os.environ.get("PLAP_DATA_DIR") or APP_DIR / "data")
 DB_PATH = DATA_DIR / "prompt_like_a_pro.sqlite3"
 SAN_RE = re.compile(r"^[A-Za-z0-9_.-]{3,32}$")
 PHOTO_RE = re.compile(r"^data:image/(jpeg|jpg|png|webp);base64,[A-Za-z0-9+/=\r\n]+$")
@@ -133,7 +135,7 @@ def now_iso() -> str:
 
 
 def get_db() -> sqlite3.Connection:
-    DATA_DIR.mkdir(exist_ok=True)
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(DB_PATH, timeout=10)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
