@@ -1,6 +1,5 @@
 # Render Blueprint: one web service running the booth app + LLM gateway.
-# Dashboard → New → Blueprint → pick this repo. Render asks for the values
-# marked `sync: false` (the Anthropic key) on first deploy.
+# Dashboard → New → Blueprint → pick this repo.
 services:
   - type: web
     name: prompt-like-a-pro
@@ -12,10 +11,8 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: "3.12.7"
-      # Anthropic key used by the gateway. Leave empty to run with the
-      # built-in offline scorer only.
-      - key: ANTHROPIC_ACTIVE_KEY_1
-        sync: false
+      # AI scoring is off by default (built-in offline scorer). To turn it on,
+      # add ANTHROPIC_ACTIVE_KEY_1 in the service's Environment tab.
       - key: GATEWAY_ACTIVE_KEY_COUNT
         value: "1"
       - key: GATEWAY_SPARE_KEY_COUNT
